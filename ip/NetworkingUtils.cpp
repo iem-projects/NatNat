@@ -29,8 +29,17 @@
 */
 #include "NetworkingUtils.h"
 
-#include <winsock2.h>   // this must come first to prevent errors with MSVC7
-#include <windows.h>
+#ifdef __linux__
+# include <cstring>
+# include <arpa/inet.h>
+# include <netdb.h>
+
+typedef long LONG;
+
+#else
+# include <winsock2.h>   // this must come first to prevent errors with MSVC7
+# include <windows.h>
+#endif
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -44,7 +53,7 @@ NetworkInitializer::NetworkInitializer()
         // there is a race condition here if one thread tries to access
         // the library while another is still initializing it. 
         // i can't think of an easy way to fix it so i'm telling you here
-        // incase you need to init the library from two threads at once.
+        // in case you need to init the library from two threads at once.
         // this is why the header file advises to instantiate one of these 
         // in main() so that the initialization happens globally
 
