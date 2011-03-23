@@ -2,6 +2,8 @@ default: OSCNatNetClient
 
 VPATH = .:osc:ip
 
+CXXFLAGS += -INatNetSDK/include
+
 OSCSRC=OscTypes.cpp \
 	OscOutboundPacketStream.cpp \
 	OscReceivedElements.cpp \
