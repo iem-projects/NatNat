@@ -448,15 +448,14 @@ void resetClient()
 }
 
 char* _getOSCTimeStamp(){
+  unsigned int tmili = 0;
+#ifdef _WIN32
+  SYSTEMTIME lt;
+  GetLocalTime(&lt);
+  tmili = ((int)lt.wHour)*3600000 + ((int)lt.wMinute)*60000 + ((int)lt.wSecond)*1000 + ((int)lt.wMilliseconds);
+#endif
+  char* ts = (char*)malloc(100);
+  sprintf(ts, "%d", tmili);
 
-	SYSTEMTIME lt;
-    
-    GetLocalTime(&lt);
-
-	unsigned int tmili = ((int)lt.wHour)*3600000 + ((int)lt.wMinute)*60000 + ((int)lt.wSecond)*1000 + ((int)lt.wMilliseconds);
-
-	char* ts = (char*)malloc(100);
-	sprintf(ts, "%d", tmili);
-
-	return ts;
+  return ts;
 }
