@@ -15,11 +15,19 @@ Usage:
 */
 
 #include <stdio.h>
+#ifdef __linux__
+# include <cstring>
+# include <cstdlib>
+# include <time.h>
+#define __cdecl
+typedef char _TCHAR;
+#else
 #include <tchar.h>
 #include <conio.h>
 #include <winsock2.h>
 #include <time.h>
 #include <windows.h>
+#endif
 
 #include "NatNetTypes.h"
 #include "NatNetClient.h"
@@ -28,8 +36,14 @@ Usage:
 #include "ip/UdpSocket.h"
 
 
+#ifndef MAX_PATH
+# define MAX_PATH 1024
+#endif
 
-#pragma warning( disable : 4996 )
+#ifdef _MSC_VER
+# pragma warning( disable : 4996 )
+#endif
+
 
 void _WriteHeader(FILE* fp, sDataDescriptions* pBodyDefs);
 void _WriteFrame(FILE* fp, sFrameOfMocapData* data);
