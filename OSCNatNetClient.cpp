@@ -19,6 +19,14 @@ OSCNatNetClient [ServerIP] [LocalIP] [OSCIP] [OSCPort] <log>
 # include <cstring>
 # include <cstdlib>
 # include <time.h>
+
+// good idea to use curses here?
+#include <curses.h>
+int _getch(void) {
+  return getch();
+}
+
+
 #define __cdecl
 typedef char _TCHAR;
 #else
@@ -152,7 +160,11 @@ int _tmain(int argc, _TCHAR* argv[])
 
     char szFile[MAX_PATH];
     char szFolder[MAX_PATH];
+#ifdef __linux__
+    sprintf(szFolder, "./");
+#else
     GetCurrentDirectory(MAX_PATH, szFolder);
+#endif
     char * timeLabel = (char*)malloc(50);
     time_t rawtime;
     struct tm* timeinfo;
