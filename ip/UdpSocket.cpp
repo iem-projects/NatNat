@@ -37,8 +37,15 @@
 #include <netdb.h>
 
 typedef int SOCKET;
-
 int closesocket(int fd) {return close(fd);}
+
+// HANDLE hacks
+typedef unsigned int HANDLE;
+HANDLE CreateEvent(void*ptr0, int bool0, int bool1, void*ptr1 ) {return 0;};
+void SetEvent(HANDLE h) {;};
+void CloseHandle(HANDLE h) {;};
+
+typedef unsigned long DWORD, *LPDWORD;
 
 #else
 # include <winsock2.h>   // this must come first to prevent errors with MSVC7
