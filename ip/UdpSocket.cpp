@@ -29,9 +29,23 @@
 */
 #include "UdpSocket.h"
 
-#include <winsock2.h>   // this must come first to prevent errors with MSVC7
-#include <windows.h>
-#include <MMSystem.h>   // for timeGetTime()
+#ifdef __linux__
+#include <cstring>
+#include <unistd.h>
+#include <sys/types.h>          /* See NOTES */
+#include <sys/socket.h>
+#include <netdb.h>
+
+typedef int SOCKET;
+
+int closesocket(int fd) {return close(fd);}
+
+#else
+# include <winsock2.h>   // this must come first to prevent errors with MSVC7
+# include <windows.h>
+# include <MMSystem.h>   // for timeGetTime()
+typedef int socklen_t;
+#endif
 
 #include <vector>
 #include <algorithm>
@@ -42,9 +56,6 @@
 #include "NetworkingUtils.h"
 #include "PacketListener.h"
 #include "TimerListener.h"
-
-
-typedef int socklen_t;
 
 
 static void SockaddrFromIpEndpointName( struct sockaddr_in& sockAddr, const IpEndpointName& endpoint )
