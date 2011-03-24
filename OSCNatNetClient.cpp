@@ -327,6 +327,8 @@ int _tmain(int argc, _TCHAR* argv[])
       p << osc::EndMessage;
     }
   }
+  p << osc::EndBundle;
+
   if(transmitSocket)transmitSocket->Send(p.Data(), p.Size());
 }
 
