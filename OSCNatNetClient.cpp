@@ -59,7 +59,7 @@ void _WriteFooter(FILE* fp);
 void __cdecl DataHandler(sFrameOfMocapData* data, void* pUserData);			// receives data from the server
 void __cdecl MessageHandler(int msgType, char* msg);		// receives NatNet error mesages
 void resetClient();
-char* _getOSCTimeStamp();
+char* _getOSCTimeStamp(char[100]);
 
 NatNetClient theClient;
 FILE* fps = NULL;
@@ -164,7 +164,7 @@ int _tmain(int argc, _TCHAR* argv[])
 #else
     GetCurrentDirectory(MAX_PATH, szFolder);
 #endif
-    char * timeLabel = (char*)malloc(50);
+    char timeLabel[50];
     time_t rawtime;
     struct tm* timeinfo;
     time(&rawtime);
@@ -260,16 +260,15 @@ int _tmain(int argc, _TCHAR* argv[])
 	
 	
   int i,j;
-  char* ns;
+  char ts[100];
   char buffer[(sizeof(sFrameOfMocapData))];
   osc::OutboundPacketStream p(buffer, sizeof(sFrameOfMocapData));
 	
   p << osc::BeginBundleImmediate;
 
   // timestamp
-  ns = _getOSCTimeStamp();
   p << osc::BeginMessage("/ts");
-  p << ns;
+  p << _getOSCTimeStamp(ts);
   p << osc::EndMessage;
 
   //srv latency
@@ -281,10 +280,8 @@ int _tmain(int argc, _TCHAR* argv[])
   // Mocap MarkerSet Markers
   for(j=0; j < data->nMarkerSets; j++){
     for(i =0; i < data->MocapData[j].nMarkers; i++){
-			
-
       // ATENCAO AO SPRINTF
-      ns = (char*)malloc(300);
+	  char ns[300];
       sprintf(ns,"/markerset/%s/%d", data->MocapData[j].szName, i);
       p << osc::BeginMessage(ns);
       p << data->MocapData[j].Markers[i][0]; 
@@ -296,9 +293,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
   // Other Markers
   for(i=0; i < data->nOtherMarkers; i++){
-
-    ns = (char*)malloc(50);
-    sprintf(ns,"/othermarker/%d", i);
+    char ns[50];
+	sprintf(ns,"/othermarker/%d", i);
     p << osc::BeginMessage(ns);
     p << data->OtherMarkers[i][0];
     p << data->OtherMarkers[i][1];
@@ -309,8 +305,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
   // Rigid Bodies
   for(i=0; i < data->nRigidBodies; i++){
-
-    ns = (char*)malloc(50);		
+	char ns[50];
     sprintf(ns,"/rigidbody/%d", data->RigidBodies[i].ID);
     p << osc::BeginMessage(ns);
     p << data->RigidBodies[i].x;
@@ -323,10 +318,9 @@ int _tmain(int argc, _TCHAR* argv[])
     p << osc::EndMessage;
 
     for(int iMarker=0; iMarker < data->RigidBodies[i].nMarkers; iMarker++){			
-
-      ns = (char*)malloc(50);
-      sprintf(ns,"/rigidbody/%d/%d", data->RigidBodies[i].ID, iMarker);
-      p << osc::BeginMessage(ns);			
+      char nsMarker[50];
+      sprintf(nsMarker,"/rigidbody/%d/%d", data->RigidBodies[i].ID, iMarker);
+      p << osc::BeginMessage(nsMarker);			
       p << data->RigidBodies[i].Markers[iMarker][0];
       p << data->RigidBodies[i].Markers[iMarker][1];
       p << data->RigidBodies[i].Markers[iMarker][2];
@@ -457,14 +451,13 @@ void resetClient()
 
 }
 
-char* _getOSCTimeStamp(){
+char* _getOSCTimeStamp(char ts[100]){
   unsigned int tmili = 0;
 #ifdef _WIN32
   SYSTEMTIME lt;
   GetLocalTime(&lt);
   tmili = ((int)lt.wHour)*3600000 + ((int)lt.wMinute)*60000 + ((int)lt.wSecond)*1000 + ((int)lt.wMilliseconds);
 #endif
-  char* ts = (char*)malloc(100);
   sprintf(ts, "%d", tmili);
 
   return ts;
