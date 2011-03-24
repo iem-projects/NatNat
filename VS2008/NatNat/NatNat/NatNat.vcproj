@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="NatNat"
 	ProjectGUID="{D7A4F8C7-024D-458E-B615-6225A14B1287}"
 	RootNamespace="NatNat"
@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;C:\Dokumente und Einstellungen\eckel\Desktop\NaturalTrack\NatNetSDK\include&quot;;\\Iemusers\zmoelnig\src\git\NatNet\NatNetSDK\include"
+				AdditionalIncludeDirectories="C:\Users\em32sn027\Development\NatNetSDK2.2\NatNetSDK\include;&quot;C:\Dokumente und Einstellungen\eckel\Desktop\NaturalTrack\NatNetSDK\include&quot;;\\Iemusers\zmoelnig\src\git\NatNet\NatNetSDK\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -63,7 +63,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="NatNetLibStatic.lib ws2_32.lib winmm.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;C:\Dokumente und Einstellungen\eckel\Desktop\NaturalTrack\NatNetSDK\lib&quot;;\\Iemusers\zmoelnig\src\git\NatNet\NatNetSDK\lib"
+				AdditionalLibraryDirectories="C:\Users\em32sn027\Development\NatNetSDK2.2\NatNetSDK\lib;&quot;C:\Dokumente und Einstellungen\eckel\Desktop\NaturalTrack\NatNetSDK\lib&quot;;\\Iemusers\zmoelnig\src\git\NatNet\NatNetSDK\lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -97,7 +97,6 @@
 			ConfigurationType="1"
 			CharacterSet="0"
 			WholeProgramOptimization="1"
-			ExcludeBuckets="12;14"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -119,7 +118,7 @@
 				UseUnicodeResponseFiles="true"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;C:\Dokumente und Einstellungen\eckel\Desktop\NaturalTrack\NatNetSDK\include&quot;;\\Iemusers\zmoelnig\src\git\NatNet\NatNetSDK\include"
+				AdditionalIncludeDirectories="C:\Users\em32sn027\Development\NatNetSDK2.2\NatNetSDK\include;&quot;C:\Dokumente und Einstellungen\eckel\Desktop\NaturalTrack\NatNetSDK\include&quot;;\\Iemusers\zmoelnig\src\git\NatNet\NatNetSDK\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -140,7 +139,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="NatNetLibStatic.lib ws2_32.lib winmm.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="\\Iemusers\zmoelnig\src\git\NatNet\NatNetSDK\lib"
+				AdditionalLibraryDirectories="C:\Users\em32sn027\Development\NatNetSDK2.2\NatNetSDK\lib;&quot;C:\Dokumente und Einstellungen\eckel\Desktop\NaturalTrack\NatNetSDK\lib&quot;;\\Iemusers\zmoelnig\src\git\NatNet\NatNetSDK\lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
