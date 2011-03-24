@@ -1,4 +1,4 @@
-all: OSCNatNetClient.exe
+all: NatNat.exe
 
 SDK_PATH = C:\Programme\Microsoft SDKs\Windows\v6.0A\Lib
 VC_PATH = $(VCINSTALLDIR)\lib
@@ -8,8 +8,8 @@ VPATH=Debug:.
 
 OBJ=OSCNatNetClient.obj OscOutboundPacketStream.obj OscPrintReceivedElements.obj OscReceivedElements.obj OscTypes.obj UdpSocket.obj IpEndpointName.obj NetworkingUtils.obj
 
-LDFLAGS=/nologo "C:\\$(HOMEPATH)"\Desktop\NaturalTrack\NatNetSDK.2\lib\NatNetLibStatic.lib $(WIN_LIB)
+LDFLAGS=/nologo "C:\\$(HOMEPATH)"\Desktop\NaturalTrack\NatNetSDK\lib\NatNetLibStatic.lib $(WIN_LIB)
 
 
-OSCNatNetClient.exe: $(OBJ)
-	link /out:OSCNatNetClient.exe $(OBJ) $(LDFLAGS)
+NatNat.exe: $(OBJ)
+	link /out:NatNat.exe $(OBJ) $(LDFLAGS)
