@@ -79,7 +79,7 @@ int _tmain(int argc, _TCHAR* argv[])
 {
 	
   if((argc < 4) || ((argc > 5) && (strcmp("log", argv[5])))){
-    printf("Usage: OSCNatNetClient <ServerIP> <ClientIP> <OSCIP> <OSCPort> [log]");
+    printf("Usage: OSCNatNetClient <ServerIP> <ClientIP> <OSCIP> <OSCPort> [\"log\"]");
   }else{
 
 	
@@ -138,7 +138,6 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	//EU - init UDP socket
 	transmitSocket = new UdpTransmitSocket(IpEndpointName(OSCIP, OSCPort));
-
 	printf("OSC IP:%s\n", OSCIP);
 	printf("OSC Port:%d\n", OSCPort);
       }
@@ -256,7 +255,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	
   NatNetClient* pClient = (NatNetClient*) pUserData;
 
-  printf("Received frame %d\n", data->iFrame);
+  printf("Received data frame %d\n", data->iFrame);
   if(fpf) _WriteFrame(fpf,data);
 	
 	
@@ -326,7 +325,7 @@ int _tmain(int argc, _TCHAR* argv[])
     for(int iMarker=0; iMarker < data->RigidBodies[i].nMarkers; iMarker++){			
 
       ns = (char*)malloc(50);
-      sprintf(ns,"/rigidbody/%d/%d", data->RigidBodies[i].ID, i);
+      sprintf(ns,"/rigidbody/%d/%d", data->RigidBodies[i].ID, iMarker);
       p << osc::BeginMessage(ns);			
       p << data->RigidBodies[i].Markers[iMarker][0];
       p << data->RigidBodies[i].Markers[iMarker][1];
@@ -334,8 +333,7 @@ int _tmain(int argc, _TCHAR* argv[])
       p << osc::EndMessage;
     }
   }
-	
-  transmitSocket->Send(p.Data(), p.Size());
+  if(transmitSocket)transmitSocket->Send(p.Data(), p.Size());
 }
 
 // _WriteFrame writes data from the server to log file
