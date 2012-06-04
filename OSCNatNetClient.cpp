@@ -43,6 +43,10 @@ typedef char _TCHAR;
 #include "osc/OscOutboundPacketStream.h"
 #include "ip/UdpSocket.h"
 
+#ifdef HAVE_GITVERSION_H
+# include "gitversion.h"
+#endif
+
 
 #ifndef MAX_PATH
 # define MAX_PATH 1024
@@ -73,13 +77,22 @@ UdpTransmitSocket* transmitSocket;
 char* OSCIP = NULL;
 int OSCPort = 0;
 
+void splash(_TCHAR*name) {
+	printf("%s: NatNet to OSC bridge\n", name);
+#ifdef GITREVISION
+	printf("\trev:%s compiled on %s\n", GITREVISION, __DATE__);
+#else
+	printf("\tcompiled on %s\n", __DATE__);
+#endif
+}
 
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+  splash(argv[0]);
 	
   if((argc < 4) || ((argc > 5) && (strcmp("log", argv[5])))){
-    printf("Usage: OSCNatNetClient <ServerIP> <ClientIP> <OSCIP> <OSCPort> [\"log\"]");
+    printf("Usage: %s <ServerIP> <ClientIP> <OSCIP> <OSCPort> [\"log\"]", argv[0]);
   }else{
 
 	
