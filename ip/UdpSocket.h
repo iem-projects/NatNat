@@ -39,7 +39,7 @@
 #endif /* INCLUDED_IPENDPOINTNAME_H */
 
 
-#ifndef INVALID_SOCKET
+#if defined __linux__ && !defined INVALID_SOCKET
 # define INVALID_SOCKET -1
 #endif
 
