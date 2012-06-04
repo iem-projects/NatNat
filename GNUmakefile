@@ -2,7 +2,13 @@ default: OSCNatNetClient
 
 VPATH = .:osc:ip
 
-CXXFLAGS += -INatNetSDK/include
+NATNETSDK=/usr/local/NatNetSDK
+
+NATNETINCLUDEDIR=$(NATNETSDK)/include
+NATNETLIBDIR=$(NATNETSDK)/bin
+
+CXXFLAGS+=-I$(NATNETINCLUDEDIR)
+LDFLAGS+=-L$(NATNETLIBDIR)
 
 OSCSRC=OscTypes.cpp \
 	OscOutboundPacketStream.cpp \
