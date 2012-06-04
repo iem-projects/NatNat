@@ -256,7 +256,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	
   NatNetClient* pClient = (NatNetClient*) pUserData;
 
-  printf("Received frame %d\n", data->iFrame);
+  printf("Received data frame %d\n", data->iFrame);
   if(fpf) _WriteFrame(fpf,data);
 	
 	
