@@ -7,7 +7,7 @@ this is how i built NatNat:
   not link them, due to my missing rc.exe/mc.exe)
 - open the VC2008 shell
 - cd ....\NatNat\VS2008 (this folder)
-- cd to NatNat\NatNat\Release
+- cd to Release
 - run "name -f ..\Makefile"
 - you should now have a valid NatNat.exe file in the Release folder (where you
   are)
