@@ -276,13 +276,15 @@ int _tmain(int argc, _TCHAR* argv[])
   char ts[100];
   char buffer[(sizeof(sFrameOfMocapData))];
   osc::OutboundPacketStream p(buffer, sizeof(sFrameOfMocapData));
-	
-  p << osc::BeginBundleImmediate;
 
+  p << osc::BeginBundle(getOscTime());
+
+#if 0
   // timestamp
   p << osc::BeginMessage("/ts");
   p << _getOSCTimeStamp(ts);
   p << osc::EndMessage;
+#endif
 
   //srv latency
   p << osc::BeginMessage("/srvlag");
@@ -476,4 +478,43 @@ char* _getOSCTimeStamp(char ts[100]){
   sprintf(ts, "%d", tmili);
 
   return ts;
+}
+#define SECONDS_FROM_1900_to_1970 2208988800UL /* 17 leap years */
+#define TWO_TO_THE_32_OVER_ONE_MILLION 4295
+osc::uint64 getOscTime(void) {
+  /* from http://www.cnmat.berkeley.edu/OpenSoundControl/OSC-spec.html#timetags
+     Time tags are represented by a 64 bit fixed point number.
+     The first 32 bits specify the number of seconds since midnight on January 1, 1900,
+     and the last 32 bits specify fractional parts of a second to a precision of about 200 picoseconds.
+     This is the representation used by Internet NTP timestamps.
+     The time tag value consisting of 63 zero bits followed by a one in the least signifigant bit
+     is a special case meaning "immediately."
+  */
+  osc::uint64 result, secOffset, usecOffset;
+  long unsigned sec, usec;
+
+  // this is specific for gcc: ULL at the end to fit into long, remove this for msvc
+#ifdef __WIN32__
+  long unsigned secBetween1601and1970 = 11644473600ULL;
+  FILETIME fileTime;
+  GetSystemTimeAsFileTime(&fileTime);
+  sec  = (* (unsigned __int64 *) &fileTime / (unsigned __int64)10000000) - secBetween1601and1970;
+  usec = (* (unsigned __int64 *) &fileTime % (unsigned __int64)10000000)/(unsigned __int64)10;
+#else
+  timeval tv;
+  gettimeofday(&tv, 0);
+  sec = tv.tv_sec;
+  usec= tv.tv_usec;
+#endif
+
+  /* First get the seconds right */
+  secOffset = (unsigned) SECONDS_FROM_1900_to_1970 + (unsigned) sec;
+  /* Now get the fractional part. */
+  usecOffset = (unsigned) usec * (unsigned) TWO_TO_THE_32_OVER_ONE_MILLION;
+
+  /* make seconds the high-order 32 bits */
+  result = secOffset << 32;
+  result += usecOffset;
+
+  return result;
 }
