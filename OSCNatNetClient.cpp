@@ -90,12 +90,12 @@ void splash(_TCHAR*name) {
 int _tmain(int argc, _TCHAR* argv[])
 {
   splash(argv[0]);
-	
+
   if((argc < 4) || ((argc > 5) && (strcmp("log", argv[5])))){
     printf("Usage: %s <ServerIP> <ClientIP> <OSCIP> <OSCPort> [\"log\"]", argv[0]);
   }else{
 
-	
+
     int retCode;
     char* OSCIP = argv[3];
     int OSCPort = atoi(argv[4]);
@@ -112,7 +112,7 @@ int _tmain(int argc, _TCHAR* argv[])
     strcpy(szServerIPAddress, argv[1]);	// specified on command line
     strcpy(szMyIPAddress, argv[2]);	// specified on command line
     printf("Connecting to server at %s from %s...\n", szServerIPAddress, szMyIPAddress);
-		
+
     // Connect to NatNet server
 
 
@@ -124,7 +124,7 @@ int _tmain(int argc, _TCHAR* argv[])
       }
     else
       {
-			
+
 	// print server info
 	sServerDescription ServerDescription;
 	memset(&ServerDescription, 0, sizeof(ServerDescription));
@@ -144,7 +144,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	printf("NatNet Version: %d.%d.%d.%d\n",
 	       ServerDescription.NatNetVersion[0],
 	       ServerDescription.NatNetVersion[1],
-	       ServerDescription.NatNetVersion[2], 
+	       ServerDescription.NatNetVersion[2],
 	       ServerDescription.NatNetVersion[3]);
 	printf("Server IP:%s\n", szServerIPAddress);
 	printf("Server Name:%s\n\n", ServerDescription.szHostComputerName);
@@ -165,9 +165,9 @@ int _tmain(int argc, _TCHAR* argv[])
 	printf("[OSCNatNetClient] Received: %s", (char*)response);
       }
 
-		
-		
-		
+
+
+
     //Writing Session data to file
 
     char szFile[MAX_PATH];
@@ -182,7 +182,7 @@ int _tmain(int argc, _TCHAR* argv[])
     struct tm* timeinfo;
     time(&rawtime);
     timeinfo = localtime(&rawtime);
-		
+
     //create time label for files
     strftime (timeLabel,80,"%d.%m.%y %H.%M.%S",timeinfo);
 
@@ -194,7 +194,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
       printf("[OSCNatNetClient] Unable to retrieve current session.");
       //return 1;
-		
+
     }else{
       sprintf(szFile, "%s\\SessionData %s.txt", szFolder, timeLabel);
       fps = fopen(szFile, "w");
@@ -207,12 +207,12 @@ int _tmain(int argc, _TCHAR* argv[])
       fclose(fps);
     }
 
-		
+
     // Prepare data file for frame info
 
     if(argc > 5){
-			
-      sprintf(szFile, "%s\\FrameData %s.txt", szFolder, timeLabel);			
+
+      sprintf(szFile, "%s\\FrameData %s.txt", szFolder, timeLabel);
       fpf = fopen(szFile, "w");
       if(!fpf){
 	printf("error opening output file %s.  Exiting.", szFile);
@@ -231,11 +231,11 @@ int _tmain(int argc, _TCHAR* argv[])
       case 'q':
 	bExit = true;
 	printf("\nQuitting...\n\n");
-	break;	
+	break;
       case 'r':
 	printf("\nReseting Client...\n\n");
 	resetClient();
-	break;	
+	break;
       default:
 	printf("not an option\n\n");
 	break;
@@ -250,7 +250,7 @@ int _tmain(int argc, _TCHAR* argv[])
     if(fpf != NULL) fclose(fpf);
 
     return ErrorCode_OK;
-  }		
+  }
 }
 
 
@@ -265,13 +265,13 @@ int _tmain(int argc, _TCHAR* argv[])
       // DataHandler receives data from the server
     void __cdecl DataHandler(sFrameOfMocapData* data, void* pUserData)
 {
-	
+
   NatNetClient* pClient = (NatNetClient*) pUserData;
 
   printf("Received data frame %d\n", data->iFrame);
   if(fpf) _WriteFrame(fpf,data);
-	
-	
+
+
   int i,j;
   char ts[100];
   char buffer[(sizeof(sFrameOfMocapData))];
@@ -297,7 +297,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	  char ns[300];
       sprintf(ns,"/markerset/%s/%d", data->MocapData[j].szName, i);
       p << osc::BeginMessage(ns);
-      p << data->MocapData[j].Markers[i][0]; 
+      p << data->MocapData[j].Markers[i][0];
       p << data->MocapData[j].Markers[i][1];
       p << data->MocapData[j].Markers[i][2];
       p << osc::EndMessage;
@@ -330,10 +330,10 @@ int _tmain(int argc, _TCHAR* argv[])
     p << data->RigidBodies[i].qw;
     p << osc::EndMessage;
 
-    for(int iMarker=0; iMarker < data->RigidBodies[i].nMarkers; iMarker++){			
+    for(int iMarker=0; iMarker < data->RigidBodies[i].nMarkers; iMarker++){
       char nsMarker[50];
       sprintf(nsMarker,"/rigidbody/%d/%d", data->RigidBodies[i].ID, iMarker);
-      p << osc::BeginMessage(nsMarker);			
+      p << osc::BeginMessage(nsMarker);
       p << data->RigidBodies[i].Markers[iMarker][0];
       p << data->RigidBodies[i].Markers[iMarker][1];
       p << data->RigidBodies[i].Markers[iMarker][2];
@@ -357,7 +357,7 @@ void _WriteFrame(FILE* fp, sFrameOfMocapData* data)
 
     // Mocap MarkerSet Markers
     fprintf(fp,"Mocap MarkerSets [Count=%d]\n", data->nMarkerSets);
-		
+
     for(j=0; j < data->nMarkerSets; j++){
       fprintf(fp,"MarkerSet %d name: %s\n", j, data->MocapData[j].szName);
 
@@ -380,7 +380,7 @@ void _WriteFrame(FILE* fp, sFrameOfMocapData* data)
 	      data->OtherMarkers[i][1],
 	      data->OtherMarkers[i][2]);
     fprintf(fp, "\n");
-		
+
     // Rigid Bodies
     fprintf(fp, "Rigid Bodies [Count=%d]\n", data->nRigidBodies);
     for(i=0; i < data->nRigidBodies; i++){
@@ -393,7 +393,7 @@ void _WriteFrame(FILE* fp, sFrameOfMocapData* data)
 	      data->RigidBodies[i].qy,
 	      data->RigidBodies[i].qz,
 	      data->RigidBodies[i].qw);
-			
+
       fprintf(fp, "\n");
       fprintf(fp,"Rigid body markers [Markers Count=%d]\n", data->RigidBodies[i].nMarkers);
       for(int iMarker=0; iMarker < data->RigidBodies[i].nMarkers; iMarker++)
@@ -417,7 +417,7 @@ void _WriteHeader(FILE* fp, sDataDescriptions* pDataDefs)
 
   for(int j=0; j < pDataDefs->nDataDescriptions; j++){
     fprintf(fp,"[OSCNatNetClient] Received Data Descriptions:\n");
-		
+
     //DataDescriptors type;
     //type = Descriptor_MarkerSet;
     switch(pDataDefs->arrDataDescriptions[j].type){
@@ -435,7 +435,7 @@ void _WriteHeader(FILE* fp, sDataDescriptions* pDataDefs)
       break;
     case 2:
       fprintf(fp, "[OSCNatNetClient] Skeleton... no data!\n");
-    default: 
+    default:
       fprintf(fp, "[OSCNatNetClient] Non identified data desc...\n");
       break;
     }
